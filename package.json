@@ -1,0 +1,20 @@
+{
+  "name": "color-me",
+  "version": "1.0.0",
+  "description": "Change colours by voice. Built with Express and Webpack.",
+  "author": "Razvan Negrea <howl@wolfpilot.co> (www.wolfpilot.co)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wolfpilot/ColourMe.git"
+  },
+  "keywords": [],
+  "scripts": {
+    "build": "node server.js"
+  },
+  "devDependencies": {
+  },
+  "dependencies": {
+    "express": "^4.16.4"
+  }
+}
