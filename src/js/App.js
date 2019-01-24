@@ -6,12 +6,14 @@ import { TERMS } from "./constants/terms";
 
 const defaults = {
   autoRestart: true,
-  minConfidence: 0.7
+  minConfidenceThreshold: 0.7
 };
 
 class App {
   state = {
-    lastStartedAt: 0
+    lastStartedAt: 0,
+    confidence: 0,
+    transcript: ''
   };
 
   /**
@@ -33,33 +35,33 @@ class App {
   }
 
   /**
-   * @param {String} transcript - The speech-to-text value that was recorded
    * @private
    */
-  _handleTranscript(transcript) {
-    this._elems.transcript.textContent = `You said: ${transcript}`;
+  _handleSpeechResults() {
+    // Check confidence threshold
+    if (this.state.confidence < defaults.minConfidenceThreshold) {
+      this._elems.error.textContent = "Sorry, can you please repeat?";
 
-    if (TERMS.includes(transcript)) {
-      this._elems.body.style.backgroundColor = transcript;
+      return;
+    }
+
+    // Check whether transcript matches any term
+    if (TERMS.includes(this.state.transcript)) {
+      this._elems.body.style.backgroundColor = this.state.transcript;
       this._elems.error.textContent = '';
     } else {
-      this._elems.error.textContent = "I didn't recognise that color.";
+      this._elems.error.textContent = "I didn't recognise that term.";
     }
   }
 
   /**
-   * @param {Number} confidence - The accuracy of the perceived speech
-   * @Note: Has a value of 0 (least) to 1 (most) accurate
    * @private
    */
-  _handleConfidence(confidence) {
-    const _confidencePercentage = confidence.toFixed(2) * 100;
+  _showSpeechResults() {
+    const _confidencePercentage = this.state.confidence.toFixed(2) * 100;
 
     this._elems.confidence.textContent = `Confidence: ${_confidencePercentage}%`;
-
-    if (confidence < defaults.minConfidence) {
-      this._elems.error.textContent = "Sorry, can you please repeat?";
-    }
+    this._elems.transcript.textContent = `You said: ${this.state.transcript}`;
   }
 
   /**
@@ -73,11 +75,12 @@ class App {
 
     _recognition.onresult = event => {
       const _result = event.results[0][0];
-      const _transcript = _result.transcript.toLowerCase();
-      const _confidence = _result.confidence;
 
-      this._handleConfidence(_confidence);
-      this._handleTranscript(_transcript);
+      this.state.confidence = _result.confidence;
+      this.state.transcript = _result.transcript.toLowerCase();
+
+      this._showSpeechResults();
+      this._handleSpeechResults();
     };
 
     _recognition.onspeechend = () => {
