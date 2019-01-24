@@ -11,9 +11,9 @@
   },
   "keywords": [],
   "scripts": {
-    "start": "webpack-dev-server --mode development --open --hot --history-api-fallback",
-    "prebuild": "webpack --mode production",
-    "build": "node server.js"
+    "start": "webpack-dev-server --mode development --config config/webpack.dev.config.js --hot --history-api-fallback --env.PLATFORM=local",
+    "prebuild": "webpack --mode production --config config/webpack.prod.config.js --env.PLATFORM=production --progress",
+    "build": "node server"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",
@@ -23,9 +23,12 @@
     "css-loader": "^2.1.0",
     "html-webpack-plugin": "^3.2.0",
     "style-loader": "^0.23.1",
+    "uglifyjs-webpack-plugin": "^2.1.1",
     "webpack": "^4.29.0",
     "webpack-cli": "^3.2.1",
-    "webpack-dev-server": "^3.1.14"
+    "webpack-dev-server": "^3.1.14",
+    "webpack-merge": "^4.2.1",
+    "webpack-visualizer-plugin": "^0.1.11"
   },
   "dependencies": {
     "express": "^4.16.4"
