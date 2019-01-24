@@ -5,10 +5,33 @@ import { getSpeechRecognition } from "./utils/speech";
 import { TERMS } from "./constants/terms";
 
 const defaults = {
+  autoRestart: true,
   minConfidence: 0.7
 };
 
 class App {
+  state = {
+    lastStartedAt: 0
+  };
+
+  /**
+   * @NOTE: Shamelessly plugged from Tal Ater's "annyang" library as detailed on StackOverflow. Thank you!
+   * @NOTE: URL: https://stackoverflow.com/a/30007684/4980568
+   * @private
+   */
+  _restartSpeechRecognition() {
+    const timeSinceLastStart = new Date().getTime() - this.state.lastStartedAt;
+
+    // Throttle restart to a minimum of 1 second
+    if (timeSinceLastStart < 1000) {
+      setTimeout(() => {
+        this._setupSpeechRecognition();
+      }, 1000 - timeSinceLastStart);
+    } else {
+      this._setupSpeechRecognition();
+    }
+  }
+
   /**
    * @param {String} transcript - The speech-to-text value that was recorded
    * @private
@@ -18,6 +41,7 @@ class App {
 
     if (TERMS.includes(transcript)) {
       this._elems.body.style.backgroundColor = transcript;
+      this._elems.error.textContent = '';
     } else {
       this._elems.error.textContent = "I didn't recognise that color.";
     }
@@ -43,9 +67,11 @@ class App {
    * @private
    */
   _setupSpeechRecognition() {
-    this._recognition.start();
+    const _recognition = getSpeechRecognition();
 
-    this._recognition.onresult = event => {
+    _recognition.start();
+
+    _recognition.onresult = event => {
       const _result = event.results[0][0];
       const _transcript = _result.transcript.toLowerCase();
       const _confidence = _result.confidence;
@@ -54,17 +80,30 @@ class App {
       this._handleTranscript(_transcript);
     };
 
-    this._recognition.onspeechend = () => {
-      this._recognition.stop();
+    _recognition.onspeechend = () => {
+      _recognition.stop();
+
+      // Restart speech recognition automatically
+      if (defaults.autoRestart) {
+        this._restartSpeechRecognition();
+      }
     };
 
-    this._recognition.onnomatch = () => {
+    _recognition.onnomatch = () => {
       this._elems.error.textContent = "Speech not recognized.";
     };
 
-    this._recognition.onerror = event => {
+    _recognition.onerror = event => {
+      if (event.error === 'no-speech') {
+        this._restartSpeechRecognition();
+
+        return;
+      }
+
       this._elems.error.textContent = "Error occurred in recognition: " + event.error;
     };
+
+    this.state.lastStartedAt = new Date().getTime();
   }
 
   /**
@@ -102,21 +141,12 @@ class App {
   }
 
   /**
-   * Setup useful parameters
-   * @private
-   */
-  _setupParams() {
-    this._recognition = getSpeechRecognition();
-  }
-
-  /**
    * @public
    */
   init() {
-    this._setupParams();
     this._cacheSelectors();
 
-    if (!this._recognition) {
+    if (!getSpeechRecognition()) {
       this._elems.error.textContent = "Speech recognition not supported, sorry!";
 
       return;
