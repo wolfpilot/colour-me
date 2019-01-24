@@ -8,7 +8,9 @@ const SpeechRecognitionEvent = SpeechRecognitionEvent || webkitSpeechRecognition
 
 const _getGrammar = () => {
   // Terms to match
-  const formattedTerms = TERMS.join(' | ');
+  const formattedTerms = TERMS
+    .map(term => term.name)
+    .join(' | ');
 
   return `#JSGF V1.0; grammar colors; public <color> = ${formattedTerms};`;
 };

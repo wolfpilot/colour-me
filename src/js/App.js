@@ -1,8 +1,8 @@
-// Utils
-import { getSpeechRecognition } from "./utils/speech";
-
 // Config
 import { TERMS } from "./constants/terms";
+
+// Utils
+import { getSpeechRecognition } from "./utils/speech";
 
 const defaults = {
   autoRestart: true,
@@ -46,8 +46,10 @@ class App {
     }
 
     // Check whether transcript matches any term
-    if (TERMS.includes(this.state.transcript)) {
-      this._elems.body.style.backgroundColor = this.state.transcript;
+    const match = TERMS.find(term => term.name === this.state.transcript);
+
+    if (match) {
+      this._elems.body.style.backgroundColor = `#${match.hex}`;
       this._elems.error.textContent = '';
     } else {
       this._elems.error.textContent = "I didn't recognise that term.";
@@ -120,8 +122,8 @@ class App {
       const elem = document.createElement('li');
 
       elem.classList = 'term';
-      elem.textContent = term;
-      elem.style.backgroundColor = term;
+      elem.textContent = term.name;
+      elem.style.backgroundColor = `#${term.hex}`;
 
       _frag.appendChild(elem);
     });
