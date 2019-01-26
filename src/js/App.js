@@ -32,7 +32,7 @@ class App {
   _start() {
     this.state.isPaused = false;
 
-    this._setupSpeechRecognition();
+    this._initRecognition();
   }
 
   /**
@@ -40,16 +40,16 @@ class App {
    * @NOTE: URL: https://stackoverflow.com/a/30007684/4980568
    * @private
    */
-  _restartSpeechRecognition() {
+  _restart() {
     const timeSinceLastStart = new Date().getTime() - this.state.lastStartedAt;
 
     // Throttle restart to a minimum of 1 second
     if (timeSinceLastStart < 1000) {
       setTimeout(() => {
-        this._setupSpeechRecognition();
+        this._initRecognition();
       }, 1000 - timeSinceLastStart);
     } else {
-      this._setupSpeechRecognition();
+      this._initRecognition();
     }
   }
 
@@ -89,7 +89,7 @@ class App {
    * Initialise the speech recognition listeners
    * @private
    */
-  _setupSpeechRecognition() {
+  _initRecognition() {
     this._recognition = getSpeechRecognition();
 
     this._recognition.start();
@@ -109,7 +109,7 @@ class App {
 
       // Restart speech recognition automatically
       if (defaults.autoRestart && !this.state.isPaused) {
-        this._restartSpeechRecognition();
+        this._restart();
       }
     };
 
@@ -119,7 +119,7 @@ class App {
 
     this._recognition.onerror = event => {
       if (event.error === 'no-speech') {
-        this._restartSpeechRecognition();
+        this._restart();
 
         return;
       }
@@ -191,7 +191,7 @@ class App {
     }
 
     this._setupTerms();
-    this._setupSpeechRecognition();
+    this._initRecognition();
     this._bindListeners();
   }
 }
