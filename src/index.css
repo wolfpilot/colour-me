@@ -1,4 +1,15 @@
 body {
-  background-color: skyblue;
-  color: black;
+  margin: 0;
+  transition: background-color 0.5s ease-in-out;
+}
+
+.term-list {
+  max-width: 160px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.term {
+  padding: 4px 8px;
 }
