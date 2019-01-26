@@ -11,10 +11,29 @@ const defaults = {
 
 class App {
   state = {
+    isPaused: 0,
     lastStartedAt: 0,
     confidence: 0,
     transcript: ''
   };
+
+  /**
+   * @private
+   */
+  _pause() {
+    this.state.isPaused = true;
+
+    this._recognition.stop();
+  }
+
+  /**
+   * @private
+   */
+  _start() {
+    this.state.isPaused = false;
+
+    this._setupSpeechRecognition();
+  }
 
   /**
    * @NOTE: Shamelessly plugged from Tal Ater's "annyang" library as detailed on StackOverflow. Thank you!
@@ -71,11 +90,11 @@ class App {
    * @private
    */
   _setupSpeechRecognition() {
-    const _recognition = getSpeechRecognition();
+    this._recognition = getSpeechRecognition();
 
-    _recognition.start();
+    this._recognition.start();
 
-    _recognition.onresult = event => {
+    this._recognition.onresult = event => {
       const _result = event.results[0][0];
 
       this.state.confidence = _result.confidence;
@@ -85,20 +104,20 @@ class App {
       this._handleSpeechResults();
     };
 
-    _recognition.onspeechend = () => {
-      _recognition.stop();
+    this._recognition.onspeechend = () => {
+      this._recognition.stop();
 
       // Restart speech recognition automatically
-      if (defaults.autoRestart) {
+      if (defaults.autoRestart && !this.state.isPaused) {
         this._restartSpeechRecognition();
       }
     };
 
-    _recognition.onnomatch = () => {
+    this._recognition.onnomatch = () => {
       this._elems.error.textContent = "Speech not recognized.";
     };
 
-    _recognition.onerror = event => {
+    this._recognition.onerror = event => {
       if (event.error === 'no-speech') {
         this._restartSpeechRecognition();
 
@@ -109,6 +128,21 @@ class App {
     };
 
     this.state.lastStartedAt = new Date().getTime();
+  }
+
+  /**
+   * Handle user changing to other browser tabs
+   * @private
+   */
+  _handleVisibilityChange = () => {
+    document.hidden ? this._pause() : this._start();
+  };
+
+  /**
+   * @private
+   */
+  _bindListeners() {
+    document.addEventListener('visibilitychange', this._handleVisibilityChange, false);
   }
 
   /**
@@ -132,7 +166,6 @@ class App {
   }
 
   /**
-   * Cache DOM elements
    * @private
    */
   _cacheSelectors() {
@@ -159,6 +192,7 @@ class App {
 
     this._setupTerms();
     this._setupSpeechRecognition();
+    this._bindListeners();
   }
 }
 
