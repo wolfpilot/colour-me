@@ -11,9 +11,9 @@
   },
   "keywords": [],
   "scripts": {
-    "start": "webpack-dev-server --mode development --config config/webpack.dev.config.js --hot --history-api-fallback --env.PLATFORM=local",
-    "prebuild": "webpack --mode production --config config/webpack.prod.config.js --env.PLATFORM=production --progress",
-    "build": "node server"
+    "dev": "webpack-dev-server --mode development --config config/webpack.dev.config.js --hot --history-api-fallback --env.PLATFORM=local",
+    "start": "node server.js",
+    "heroku-postbuild": "webpack --mode production --config config/webpack.prod.config.js --env.PLATFORM=production --progress"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",
