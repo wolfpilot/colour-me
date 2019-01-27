@@ -1,22 +1,26 @@
 export const TERMS = [
   {
+    name: 'ice',
+    hex: 'c6e3e7'
+  },
+  {
     name: 'lime',
-    hex: 'D1F2A5'
+    hex: 'd1f2a5'
   },
   {
     name: 'honey',
-    hex: 'EFFAB4'
+    hex: 'effab4'
   },
   {
-    name: 'orange sherbert',
-    hex: 'FFC48C'
+    name: 'orange sherbet',
+    hex: 'ffc48c'
   },
   {
-    name: 'salmon orange',
-    hex: 'FF9F80'
+    name: 'salmon',
+    hex: 'ff9f80'
   },
   {
-    name: 'pink',
-    hex: 'F56991'
-  }
+    name: 'persian pink',
+    hex: 'f56991'
+  },
 ];

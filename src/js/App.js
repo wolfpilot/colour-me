@@ -11,29 +11,12 @@ const defaults = {
 
 class App {
   state = {
-    isPaused: 0,
+    isDebugging: false,
+    isPaused: false,
     lastStartedAt: 0,
     confidence: 0,
     transcript: ''
   };
-
-  /**
-   * @private
-   */
-  _pause() {
-    this.state.isPaused = true;
-
-    this._recognition.stop();
-  }
-
-  /**
-   * @private
-   */
-  _start() {
-    this.state.isPaused = false;
-
-    this._initRecognition();
-  }
 
   /**
    * @NOTE: Shamelessly plugged from Tal Ater's "annyang" library as detailed on StackOverflow. Thank you!
@@ -56,10 +39,18 @@ class App {
   /**
    * @private
    */
+  _updateDebugger() {
+    this._elems.confidence.textContent = this.state.confidence;
+    this._elems.transcript.textContent = this.state.transcript;
+  }
+
+  /**
+   * @private
+   */
   _handleSpeechResults() {
     // Check confidence threshold
     if (this.state.confidence < defaults.minConfidenceThreshold) {
-      this._elems.error.textContent = "Sorry, can you please repeat?";
+      this._elems.output.textContent = "Sorry, can you please repeat?";
 
       return;
     }
@@ -68,10 +59,11 @@ class App {
     const match = TERMS.find(term => term.name === this.state.transcript);
 
     if (match) {
-      this._elems.body.style.backgroundColor = `#${match.hex}`;
+      this._elems.overlay.style.backgroundColor = `#${match.hex}`;
+
       this._elems.error.textContent = '';
     } else {
-      this._elems.error.textContent = "I didn't recognise that term.";
+      this._elems.output.textContent = "I didn't recognise that term.";
     }
   }
 
@@ -81,8 +73,7 @@ class App {
   _showSpeechResults() {
     const _confidencePercentage = this.state.confidence.toFixed(2) * 100;
 
-    this._elems.confidence.textContent = `Confidence: ${_confidencePercentage}%`;
-    this._elems.transcript.textContent = `You said: ${this.state.transcript}`;
+    this._elems.output.textContent = `${this.state.transcript} (${_confidencePercentage})%`;
   }
 
   /**
@@ -102,6 +93,7 @@ class App {
 
       this._showSpeechResults();
       this._handleSpeechResults();
+      this._updateDebugger();
     };
 
     this._recognition.onspeechend = () => {
@@ -131,6 +123,38 @@ class App {
   }
 
   /**
+   * @param {Object} e - The 'mousemove' event
+   * @private
+   */
+  _handleMouseMove= e => {
+    // Resize the overlay element based on the mouse position
+    const _bounds = this._elems.body.getBoundingClientRect();
+    const _position = ((e.pageX - _bounds.left) / this._elems.body.offsetWidth) * 100;
+
+    if (_position <= 100) {
+      this._elems.overlay.style.maxWidth = `${_position}%`;
+    }
+  };
+
+  /**
+   * @private
+   */
+  _pause() {
+    this.state.isPaused = true;
+
+    this._recognition.stop();
+  }
+
+  /**
+   * @private
+   */
+  _start() {
+    this.state.isPaused = false;
+
+    this._initRecognition();
+  }
+
+  /**
    * Handle user changing to other browser tabs
    * @private
    */
@@ -142,7 +166,9 @@ class App {
    * @private
    */
   _bindListeners() {
-    document.addEventListener('visibilitychange', this._handleVisibilityChange, false);
+    document.addEventListener('visibilitychange', this._handleVisibilityChange);
+
+    window.addEventListener("mousemove", this._handleMouseMove);
   }
 
   /**
@@ -168,13 +194,26 @@ class App {
   /**
    * @private
    */
+  _setupDebugger() {
+    if (this.state.isDebugging) {
+      this._elems.debugCheckbox.checked = true;
+    }
+  }
+
+  /**
+   * @private
+   */
   _cacheSelectors() {
     this._elems = {
+      debugCheckbox: document.getElementById('debug-checkbox'),
+      debugOutput: document.getElementById('debug-output'),
       body: document.getElementsByTagName('body')[0],
       termList: document.getElementById('term-list'),
-      confidence: document.getElementById('output-confidence'),
-      transcript: document.getElementById('output-transcript'),
-      error: document.getElementById('output-error')
+      overlay: document.getElementById('overlay'),
+      output: document.getElementById('output'),
+      confidence: document.getElementById('debug-confidence'),
+      transcript: document.getElementById('debug-transcript'),
+      error: document.getElementById('debug-error')
     };
   }
 
@@ -190,9 +229,11 @@ class App {
       return;
     }
 
+    this._setupDebugger();
     this._setupTerms();
-    this._initRecognition();
     this._bindListeners();
+    this._initRecognition();
+    this._updateDebugger();
   }
 }
 
