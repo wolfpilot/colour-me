@@ -11,7 +11,8 @@ const defaults = {
 
 class App {
   state = {
-    isPaused: 0,
+    isDebugging: false,
+    isPaused: false,
     lastStartedAt: 0,
     confidence: 0,
     transcript: ''
@@ -38,10 +39,18 @@ class App {
   /**
    * @private
    */
+  _updateDebugger() {
+    this._elems.confidence.textContent = this.state.confidence;
+    this._elems.transcript.textContent = this.state.transcript;
+  }
+
+  /**
+   * @private
+   */
   _handleSpeechResults() {
     // Check confidence threshold
     if (this.state.confidence < defaults.minConfidenceThreshold) {
-      this._elems.error.textContent = "Sorry, can you please repeat?";
+      this._elems.output.textContent = "Sorry, can you please repeat?";
 
       return;
     }
@@ -54,7 +63,7 @@ class App {
 
       this._elems.error.textContent = '';
     } else {
-      this._elems.error.textContent = "I didn't recognise that term.";
+      this._elems.output.textContent = "I didn't recognise that term.";
     }
   }
 
@@ -64,8 +73,7 @@ class App {
   _showSpeechResults() {
     const _confidencePercentage = this.state.confidence.toFixed(2) * 100;
 
-    this._elems.confidence.textContent = `Confidence: ${_confidencePercentage}%`;
-    this._elems.transcript.textContent = `You said: ${this.state.transcript}`;
+    this._elems.output.textContent = `${this.state.transcript} (${_confidencePercentage})%`;
   }
 
   /**
@@ -85,6 +93,7 @@ class App {
 
       this._showSpeechResults();
       this._handleSpeechResults();
+      this._updateDebugger();
     };
 
     this._recognition.onspeechend = () => {
@@ -185,14 +194,26 @@ class App {
   /**
    * @private
    */
+  _setupDebugger() {
+    if (this.state.isDebugging) {
+      this._elems.debugCheckbox.checked = true;
+    }
+  }
+
+  /**
+   * @private
+   */
   _cacheSelectors() {
     this._elems = {
+      debugCheckbox: document.getElementById('debug-checkbox'),
+      debugOutput: document.getElementById('debug-output'),
       body: document.getElementsByTagName('body')[0],
       termList: document.getElementById('term-list'),
       overlay: document.getElementById('overlay'),
-      confidence: document.getElementById('output-confidence'),
-      transcript: document.getElementById('output-transcript'),
-      error: document.getElementById('output-error')
+      output: document.getElementById('output'),
+      confidence: document.getElementById('debug-confidence'),
+      transcript: document.getElementById('debug-transcript'),
+      error: document.getElementById('debug-error')
     };
   }
 
@@ -208,9 +229,11 @@ class App {
       return;
     }
 
+    this._setupDebugger();
     this._setupTerms();
     this._bindListeners();
     this._initRecognition();
+    this._updateDebugger();
   }
 }
 

@@ -5,22 +5,22 @@ export const TERMS = [
   },
   {
     name: 'lime',
-    hex: 'D1F2A5'
+    hex: 'd1f2a5'
   },
   {
     name: 'honey',
-    hex: 'EFFAB4'
+    hex: 'effab4'
   },
   {
     name: 'orange sherbet',
-    hex: 'FFC48C'
+    hex: 'ffc48c'
   },
   {
     name: 'salmon',
-    hex: 'FF9F80'
+    hex: 'ff9f80'
   },
   {
     name: 'persian pink',
-    hex: 'F56991'
+    hex: 'f56991'
   },
 ];

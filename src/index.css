@@ -45,14 +45,19 @@ body {
 }
 
 .term-list {
-  position: fixed;
-  z-index: 20;
-  top: 0;
-  left: 0;
-  max-width: 160px;
+  position: relative;
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+@media screen and (min-width: 480px) {
+  .term-list {
+    position: fixed;
+    top: 0;
+    left: 0;
+    max-width: 160px;
+  }
 }
 
 .term {
@@ -61,25 +66,77 @@ body {
   font-size: 12px;
 }
 
-.output {
+.output-wrapper {
   position: fixed;
-  bottom: 0;
+  right: 0;
+  bottom: 16px;
   left: 0;
+  text-align: center;
+}
+
+.output {
+  display: inline;
+  padding: 4px 8px;
+  background-color: #000;
+  color: #fff;
+  font-size: 16px;
+}
+
+.ui {
+  position: relative;
+  z-index: 20;
+}
+
+.debug {
+  position: fixed;
+  top: 0;
+  right: 0;
+  max-width: 50%;
   padding-left: 8px;
   padding-right: 8px;
+  text-align: right;
 }
 
-.output-text {
+.debug__checkbox {
+  margin-bottom: 8px;
+}
+
+.debug__output {
+  display: none;
+}
+
+#debug-checkbox:checked ~ .debug__output {
+  display: block;
+}
+
+.debug__text {
   margin-top: 0;
-  font-size: 32px;
 }
 
-.output-text:last-child {
+.debug__text:last-child {
   margin-bottom: 4px;
 }
 
-.output-text:not(:last-child) {
+.debug__text:not(:last-child) {
   margin-bottom: 12px;
+}
+
+.overlay {
+  position: fixed;
+  z-index: 10;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  max-width: 50%;
+  background-color: #c6e3e7;
+  mix-blend-mode: hue;
+  -webkit-transition: background-color 0.5s ease-in-out, max-width 0.05s;
+  -moz-transition: background-color 0.5s ease-in-out, max-width 0.05s;
+  -ms-transition: background-color 0.5s ease-in-out, max-width 0.05s;
+  -o-transition: background-color 0.5s ease-in-out, max-width 0.05s;
+  transition: background-color 0.5s ease-in-out, max-width 0.05s;
+  pointer-events: none;
 }
 
 .figure {
@@ -137,22 +194,4 @@ body {
 
 .figure__link:visited {
   color: #000;
-}
-
-.overlay {
-  position: fixed;
-  z-index: 10;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  max-width: 50%;
-  background-color: #727afa;
-  mix-blend-mode: hue;
-  -webkit-transition: background-color 0.5s ease-in-out;
-  -moz-transition: background-color 0.5s ease-in-out;
-  -ms-transition: background-color 0.5s ease-in-out;
-  -o-transition: background-color 0.5s ease-in-out;
-  transition: background-color 0.5s ease-in-out;
-  pointer-events: none;
 }

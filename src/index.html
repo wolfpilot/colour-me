@@ -2,6 +2,7 @@
 
 <html>
   <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <base href="/">
     <title>ColourMe</title>
@@ -12,13 +13,27 @@
   <body>
     <main id="main" class="main">
 
-      <ul id="term-list" class="term-list"></ul>
+      <div class="ui">
+        <ul id="term-list" class="term-list"></ul>
 
-      <div class="output">
-        <p id="output-confidence" class="output-text"></p>
-        <p id="output-transcript" class="output-text"></p>
-        <p id="output-error" class="output-text"></p>
+        <div class="output-wrapper">
+          <p id="output" class="output">Please say a colour's name to begin</p>
+        </div>
+
+        <div class="debug">
+          <input type="checkbox" name="debug" id="debug-checkbox" class="debug__checkbox">
+          <label for="debug-checkbox">Debugging mode</label>
+
+          <div id="debug__output" class="debug__output">
+            <p class="debug__text"><b>Min. confidence required:</b> 0.7</p>
+            <p class="debug__text"><b>Confidence:</b>&nbsp;<span id="debug-confidence"></span></p>
+            <p class="debug__text"><b>Transcript:</b>&nbsp;<span id="debug-transcript"></span></p>
+            <p class="debug__text"><b>Error:</b>&nbsp;<span id="debug-error"></span></p>
+          </div>
+        </div>
       </div>
+
+      <div id="overlay" class="overlay"></div>
 
       <div class="content">
         <h1 class="title">ColourMe</h1>
@@ -30,8 +45,6 @@
             <a class="figure__link" href="https://unsplash.com/photos/fnylyZVS-x4" target="_blank" rel="noopener noreferrer" title="Download photo by Anton Shakirov on Unsplash">by Anton Shakirov</a>
           </figcaption>
         </figure>
-
-        <div id="overlay" class="overlay"></div>
       </div>
 
     </main>
