@@ -192,6 +192,8 @@ body {
   padding-left: 2px;
 }
 
+.figure__link,
+.figure__link:active,
 .figure__link:visited {
   color: #000;
 }
