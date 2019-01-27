@@ -2,9 +2,9 @@
 import { TERMS } from "../constants/terms";
 
 // Cache all prefixed and non-prefixed objects
-const SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
-const SpeechGrammarList = SpeechGrammarList || webkitSpeechGrammarList;
-const SpeechRecognitionEvent = SpeechRecognitionEvent || webkitSpeechRecognitionEvent;
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition || window.mozSpeechRecognition || window.msSpeechRecognition;
+const SpeechGrammarList = window.SpeechGrammarList || window.webkitSpeechGrammarList || window.mozSpeechGrammarList || window.msSpeechGrammarList;
+const SpeechRecognitionEvent = window.SpeechRecognitionEvent || window.webkitSpeechRecognitionEvent || window.mozSpeechRecognitionEvent || window.msSpeechRecognitionEvent;
 
 const _getGrammar = () => {
   // Terms to match
@@ -16,6 +16,10 @@ const _getGrammar = () => {
 };
 
 export const getSpeechRecognition = () => {
+  if (!SpeechRecognition) {
+    return null;
+  }
+
   const recognition = new SpeechRecognition();
   const grammarList = new SpeechGrammarList();
 

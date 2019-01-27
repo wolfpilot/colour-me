@@ -224,7 +224,8 @@ class App {
     this._cacheSelectors();
 
     if (!getSpeechRecognition()) {
-      this._elems.error.textContent = "Speech recognition not supported, sorry!";
+      this._elems.error.textContent = "Speech recognition not supported!";
+      this._elems.output.textContent = "Speech recognition not supported, sorry! Please try using the newest version of Chrome on desktop.";
 
       return;
     }
