@@ -8,14 +8,28 @@
   </head>
 
   <body>
-    <div id="main">
-      <ul id="term-list" class="term-list"></ul>
+    <main id="main" class="main">
+      <div class="sidebar">
+        <ul id="term-list" class="term-list"></ul>
 
-      <div class="output">
-        <p id="output-confidence"></p>
-        <p id="output-transcript"></p>
-        <p id="output-error"></p>
+        <div class="output">
+          <p id="output-confidence"></p>
+          <p id="output-transcript"></p>
+          <p id="output-error"></p>
+        </div>
       </div>
-    </div>
+
+      <div class="content">
+        <figure class="figure">
+          <img src="https://images.unsplash.com/photo-1546455982-d00071ec5e9c?ixlib=rb-1.2.1&auto=format&fit=crop&w=389&q=80" class="figure__image"/>
+
+          <figcaption class="figure__caption">
+            <a class="hyperlink" href="https://unsplash.com/photos/fnylyZVS-x4" target="_blank" rel="noopener noreferrer">Photo by Anton Shakirov on Unsplash</a>
+          </figcaption>
+        </figure>
+
+        <div id="overlay" class="overlay"></div>
+      </div>
+    </main>
   </body>
 </html>

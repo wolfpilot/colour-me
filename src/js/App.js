@@ -18,24 +18,6 @@ class App {
   };
 
   /**
-   * @private
-   */
-  _pause() {
-    this.state.isPaused = true;
-
-    this._recognition.stop();
-  }
-
-  /**
-   * @private
-   */
-  _start() {
-    this.state.isPaused = false;
-
-    this._initRecognition();
-  }
-
-  /**
    * @NOTE: Shamelessly plugged from Tal Ater's "annyang" library as detailed on StackOverflow. Thank you!
    * @NOTE: URL: https://stackoverflow.com/a/30007684/4980568
    * @private
@@ -68,7 +50,8 @@ class App {
     const match = TERMS.find(term => term.name === this.state.transcript);
 
     if (match) {
-      this._elems.body.style.backgroundColor = `#${match.hex}`;
+      this._elems.overlay.style.backgroundColor = `#${match.hex}`;
+
       this._elems.error.textContent = '';
     } else {
       this._elems.error.textContent = "I didn't recognise that term.";
@@ -131,6 +114,38 @@ class App {
   }
 
   /**
+   * @param {Object} e - The 'mousemove' event
+   * @private
+   */
+  _handleMouseMove= e => {
+    // Resize the overlay element based on the mouse position
+    const _bounds = this._elems.body.getBoundingClientRect();
+    const _position = ((e.pageX - _bounds.left) / this._elems.body.offsetWidth) * 100;
+
+    if (_position <= 100) {
+      this._elems.overlay.style.maxWidth = `${_position}%`;
+    }
+  };
+
+  /**
+   * @private
+   */
+  _pause() {
+    this.state.isPaused = true;
+
+    this._recognition.stop();
+  }
+
+  /**
+   * @private
+   */
+  _start() {
+    this.state.isPaused = false;
+
+    this._initRecognition();
+  }
+
+  /**
    * Handle user changing to other browser tabs
    * @private
    */
@@ -142,7 +157,9 @@ class App {
    * @private
    */
   _bindListeners() {
-    document.addEventListener('visibilitychange', this._handleVisibilityChange, false);
+    document.addEventListener('visibilitychange', this._handleVisibilityChange);
+
+    window.addEventListener("mousemove", this._handleMouseMove);
   }
 
   /**
@@ -172,6 +189,7 @@ class App {
     this._elems = {
       body: document.getElementsByTagName('body')[0],
       termList: document.getElementById('term-list'),
+      overlay: document.getElementById('overlay'),
       confidence: document.getElementById('output-confidence'),
       transcript: document.getElementById('output-transcript'),
       error: document.getElementById('output-error')
@@ -191,8 +209,8 @@ class App {
     }
 
     this._setupTerms();
-    this._initRecognition();
     this._bindListeners();
+    this._initRecognition();
   }
 }
 
