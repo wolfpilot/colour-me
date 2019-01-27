@@ -1,5 +1,9 @@
 export const TERMS = [
   {
+    name: 'ice',
+    hex: 'c6e3e7'
+  },
+  {
     name: 'lime',
     hex: 'D1F2A5'
   },
@@ -8,15 +12,15 @@ export const TERMS = [
     hex: 'EFFAB4'
   },
   {
-    name: 'orange sherbert',
+    name: 'orange sherbet',
     hex: 'FFC48C'
   },
   {
-    name: 'salmon orange',
+    name: 'salmon',
     hex: 'FF9F80'
   },
   {
-    name: 'pink',
+    name: 'persian pink',
     hex: 'F56991'
-  }
+  },
 ];
