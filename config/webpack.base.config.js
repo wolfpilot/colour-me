@@ -1,14 +1,12 @@
 // Utils
 const path = require('path');
 const { merge } = require("webpack-merge");
-const webpack = require('webpack');
 
 // Plugins
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const Visualizer = require('webpack-visualizer-plugin2');
 
-module.exports = env => {
-  const { PLATFORM } = env;
-
+module.exports = () => {
   return merge([
     {
       entry: [
@@ -50,9 +48,7 @@ module.exports = env => {
           template: './src/index.html',
           filename: './index.html'
         }),
-        new webpack.DefinePlugin({
-          'process.env.PLATFORM': JSON.stringify(PLATFORM)
-        }),
+        new Visualizer({ filename: './statistics.html' }),
       ],
     }
   ])

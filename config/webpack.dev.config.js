@@ -10,7 +10,7 @@ require('@babel/register');
 const devConfig = () => {
   return merge([
     {
-      watch: true,
+      mode: 'development',
       devtool: 'source-map',
     },
   ]);
