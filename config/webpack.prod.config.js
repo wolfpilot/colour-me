@@ -2,7 +2,7 @@
 const { merge } = require('webpack-merge');
 
 // Plugins
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const TerserPlugin = require("terser-webpack-plugin");
 
 // Config
 const baseConfig = require('./webpack.base.config');
@@ -10,9 +10,8 @@ const baseConfig = require('./webpack.base.config');
 const config = () => ({
   mode: 'production',
   optimization: {
-    minimizer: [
-      new UglifyJsPlugin()
-    ],
+    minimize: true,
+    minimizer: [new TerserPlugin()],
   },
 });
 
