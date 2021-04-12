@@ -13,6 +13,7 @@ class App {
   state = {
     isDebugging: false,
     isPaused: false,
+    hasUserInteracted: false,
     lastStartedAt: 0,
     confidence: 0,
     transcript: ''
@@ -85,6 +86,8 @@ class App {
 
     this._recognition.start();
 
+    console.log('this._recognition', this._recognition)
+
     this._recognition.onresult = event => {
       const _result = event.results[0][0];
 
@@ -149,6 +152,8 @@ class App {
    * @private
    */
   _start() {
+    if (!this.state.hasUserInteracted) return
+
     this.state.isPaused = false;
 
     this._initRecognition();
@@ -163,9 +168,24 @@ class App {
   };
 
   /**
+   * Handle any document clicks
+   * @private
+   */
+   _handleDocumentClick = () => {
+    if (this.state.hasUserInteracted) return
+
+    this.state.hasUserInteracted = true
+
+    this._start();
+
+    document.removeEventListener('click', this._handleDocumentClick)
+  };
+
+  /**
    * @private
    */
   _bindListeners() {
+    document.addEventListener('click', this._handleDocumentClick)
     document.addEventListener('visibilitychange', this._handleVisibilityChange);
 
     window.addEventListener("mousemove", this._handleMouseMove);
@@ -233,7 +253,6 @@ class App {
     this._setupDebugger();
     this._setupTerms();
     this._bindListeners();
-    this._initRecognition();
     this._updateDebugger();
   }
 }
