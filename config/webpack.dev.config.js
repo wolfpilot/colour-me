@@ -7,15 +7,9 @@ const baseConfig = require('./webpack.base.config');
 // @NOTE: Dev only!
 require('@babel/register');
 
-const devConfig = () => {
-  return merge([
-    {
-      mode: 'development',
-      devtool: 'source-map',
-    },
-  ]);
-};
+const config = () => ({
+  mode: 'development',
+  devtool: 'source-map',
+});
 
-module.exports = env => {
-  return merge(baseConfig(env), devConfig());
-};
+module.exports = env => merge(baseConfig(env), config());

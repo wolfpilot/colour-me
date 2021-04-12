@@ -11,9 +11,9 @@
   },
   "keywords": [],
   "scripts": {
-    "dev": "webpack serve --mode development --config config/webpack.dev.config.js --hot --history-api-fallback",
+    "dev": "webpack serve --config config/webpack.dev.config.js --hot --history-api-fallback",
     "start": "node server.js",
-    "heroku-postbuild": "webpack --mode production --config config/webpack.prod.config.js --progress"
+    "heroku-postbuild": "webpack --config config/webpack.prod.config.js --progress"
   },
   "devDependencies": {
     "@babel/core": "^7.13.15",
