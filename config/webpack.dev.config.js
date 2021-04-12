@@ -1,5 +1,5 @@
 // Utils
-const merge = require('webpack-merge');
+const { merge } = require('webpack-merge');
 
 // Config
 const baseConfig = require('./webpack.base.config');

@@ -1,5 +1,5 @@
 // Utils
-const merge = require('webpack-merge');
+const { merge } = require('webpack-merge');
 
 // Plugins
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
