@@ -1,28 +1,19 @@
 // Utils
-const merge = require('webpack-merge');
+const { merge } = require('webpack-merge');
 
 // Plugins
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const Visualizer = require('webpack-visualizer-plugin');
 
 // Config
 const baseConfig = require('./webpack.base.config');
 
-const prodConfig = () => {
-  return merge([
-    {
-      optimization: {
-        minimizer: [
-          new UglifyJsPlugin()
-        ],
-      },
-      plugins: [
-        new Visualizer({ filename: './statistics.html' })
-      ],
-    },
-  ]);
-};
+const config = () => ({
+  mode: 'production',
+  optimization: {
+    minimizer: [
+      new UglifyJsPlugin()
+    ],
+  },
+});
 
-module.exports = env => {
-  return merge(baseConfig(env), prodConfig());
-};
+module.exports = env => merge(baseConfig(env), config());
