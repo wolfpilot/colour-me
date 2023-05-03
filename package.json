@@ -12,8 +12,7 @@
   "keywords": [],
   "scripts": {
     "dev": "webpack serve --config config/webpack.dev.config.js --hot --history-api-fallback",
-    "start": "node server.js",
-    "heroku-postbuild": "webpack --config config/webpack.prod.config.js --progress"
+    "start": "webpack --config config/webpack.prod.config.js --progress && node server.js"
   },
   "devDependencies": {
     "@babel/core": "^7.13.15",
@@ -21,7 +20,7 @@
     "@babel/preset-env": "^7.13.15",
     "@babel/register": "^7.13.14",
     "babel-loader": "^8.2.2",
-    "css-loader": "^5.2.1",
+    "css-loader": "^5.2.7",
     "html-webpack-plugin": "^5.3.1",
     "style-loader": "^2.0.0",
     "webpack": "^5.31.2",
@@ -32,5 +31,6 @@
   },
   "dependencies": {
     "express": "^4.17.1"
-  }
+  },
+  "packageManager": "yarn@1.22.5"
 }

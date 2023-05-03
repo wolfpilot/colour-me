@@ -1,5 +1,6 @@
 # IDE auto-generated files
 .idea/
+.vscode/
 
 # Operating system
 .DS_Store
@@ -8,6 +9,15 @@ Thumbs.db
 # NPM
 node_modules
 package-lock.json
+
+# Yarn
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
 
 # Build files
 dist/
