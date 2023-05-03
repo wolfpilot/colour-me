@@ -1,4 +1,4 @@
-# [ColourMe](https://wolfpilot-colourme.herokuapp.com/)
+# [ColourMe](https://colour-me.onrender.com/)
 
 ![demo](demo.gif)
 
@@ -8,7 +8,7 @@ Set up using Express and Webpack from scratch.
 
 Due to the size and goal of this project, I didn't implement SASS or work on a responsive solution. This app is best experienced on Chrome on a Mac or Windows machine.
 
-Please allow 10 - 15 seconds for the app to load as free web dynos on Heroku go to sleep after 30 minutes of inactivity.
+Please allow 10 - 15 seconds for the app to load as free web dynos on Render go to sleep after 30 minutes of inactivity.
 
 ## Demo
 
